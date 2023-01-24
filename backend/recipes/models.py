@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import (RegexValidator, MinValueValidator,
                                     MaxValueValidator)
 from django.db import models
+from django.db.models import UniqueConstraint
 
 LENGTH_OF_FIELDS_RECIPES = 200
 
@@ -136,3 +137,27 @@ class IngredientInRecipe(models.Model):
             f'{self.ingredient.name} – {self.amount} '
             f'{self.ingredient.measurement_unit}'
         )
+
+
+class Favourite(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE, related_name='favorites',
+        verbose_name='Пользователь'
+    )
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name='favorites',
+        verbose_name='Рецепт'
+    )
+
+    class Meta:
+        verbose_name = 'Избранное'
+        constraints = [
+            UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_favourite_recipe'
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user} добавил в избранное "{self.recipe}"'
