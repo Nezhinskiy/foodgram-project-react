@@ -8,13 +8,13 @@ LENGTH_OF_USER_FIELDS = 50
 
 class User(AbstractUser):
     """
-    User model.
+    Пользовательская модель.
     """
     first_name = models.CharField(
-        verbose_name='first name', max_length=LENGTH_OF_USER_FIELDS
+        verbose_name='Имя', max_length=LENGTH_OF_USER_FIELDS
     )
     last_name = models.CharField(
-        max_length=LENGTH_OF_USER_FIELDS, verbose_name='last name',
+        max_length=LENGTH_OF_USER_FIELDS, verbose_name='Фамилия',
     )
     email = models.EmailField(
         max_length=LENGTH_OF_USER_FIELDS, verbose_name='email',
@@ -26,23 +26,23 @@ class User(AbstractUser):
     )
 
     class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
-    def __str__(self) -> str:
-        return str(self.username)
+    def __str__(self):
+        return self.username
 
 
 class Follow(models.Model):
     """
-    Model of following on authors.
+    Модель подписки на автора.
     """
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name='Author',
+        User, on_delete=models.CASCADE, verbose_name='Автор',
         related_name='follower',
     )
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name='Follower',
+        User, on_delete=models.CASCADE, verbose_name='Подписчик',
         related_name='following'
     )
 
@@ -53,8 +53,8 @@ class Follow(models.Model):
                 check=~Q(user=F('author')), name='no_self_follow'
             )
         ]
-        verbose_name = 'Subscription'
-        verbose_name_plural = 'Subscriptions'
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
 
-    def __str__(self) -> str:
-        return f"{self.user} is following {self.author}"
+    def __str__(self):
+        return f"{self.user} подписан на {self.author}"
