@@ -32,10 +32,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     'djoser',
     'django_filters',
     'users.apps.UsersConfig',
     'recipes.apps.RecipesConfig',
+    'core.apps.CoreConfig'
 ]
 
 MIDDLEWARE = [
@@ -154,4 +156,5 @@ DJOSER = {
         'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
         'user_list': ['rest_framework.permissions.IsAuthenticatedOrReadOnly'],
     },
+    'LOGIN_FIELD': 'email',
 }

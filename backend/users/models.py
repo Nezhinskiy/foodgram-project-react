@@ -3,7 +3,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.db.models import F, Q, UniqueConstraint
 
-LENGTH_OF_USER_FIELDS = 50
+LENGTH_OF_USER_FIELDS = 150
 
 
 class User(AbstractUser):
@@ -17,12 +17,14 @@ class User(AbstractUser):
         max_length=LENGTH_OF_USER_FIELDS, verbose_name='Фамилия',
     )
     email = models.EmailField(
-        max_length=LENGTH_OF_USER_FIELDS, verbose_name='email',
+        max_length=254, verbose_name='email',
         unique=True
     )
     username = models.CharField(
         verbose_name='username', max_length=LENGTH_OF_USER_FIELDS,
-        unique=True, validators=(UnicodeUsernameValidator(),)
+        unique=True, validators=(
+            UnicodeUsernameValidator(),
+        )
     )
 
     class Meta:
