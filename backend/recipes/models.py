@@ -114,7 +114,7 @@ class Recipe(models.Model):
 
 class IngredientInRecipe(models.Model):
     """
-    Ингридиенты рецепта.
+    Модель ингридиентов рецепта.
     """
     recipe = models.ForeignKey(
         Recipe, on_delete=models.CASCADE, related_name='ingredient_list',
@@ -140,6 +140,9 @@ class IngredientInRecipe(models.Model):
 
 
 class Favorite(models.Model):
+    """
+    Модель избранных рецептов.
+    """
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE, related_name='favorites',
@@ -161,3 +164,29 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f'{self.user} добавил в избранное "{self.recipe}"'
+
+
+class ShoppingList(models.Model):
+    """
+    Модель списка покупок.
+    """
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='shopping_cart',
+        verbose_name='Пользователь'
+    )
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name='shopping_cart',
+        verbose_name='Рецепт'
+    )
+
+    class Meta:
+        verbose_name = 'Список покупок'
+        verbose_name_plural = 'Список покупок'
+        constraints = [
+            UniqueConstraint(
+                fields=['user', 'recipe'], name='unique_shopping_cart'
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user} добавил "{self.recipe}" в список покупок'

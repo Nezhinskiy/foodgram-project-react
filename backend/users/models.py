@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import F, Q, UniqueConstraint
 
 LENGTH_OF_USER_FIELDS = 150
+LENGTH_OF_EMAIL_FIELDS = 254
 
 
 class User(AbstractUser):
@@ -17,7 +18,7 @@ class User(AbstractUser):
         max_length=LENGTH_OF_USER_FIELDS, verbose_name='Фамилия',
     )
     email = models.EmailField(
-        max_length=254, verbose_name='email',
+        max_length=LENGTH_OF_EMAIL_FIELDS, verbose_name='email',
         unique=True
     )
     username = models.CharField(

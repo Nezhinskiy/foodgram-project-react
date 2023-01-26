@@ -16,7 +16,9 @@ from recipes.permissions import AuthorPermission
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
-    """ Вывод ингредиентов """
+    """
+    Вывод ингредиентов.
+    """
     serializer_class = IngredientSerializer
     queryset = Ingredient.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly, )
@@ -26,7 +28,9 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class TagViewSet(viewsets.ModelViewSet):
-    """ Вывод тегов """
+    """
+    Вывод тегов.
+    """
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
@@ -34,12 +38,14 @@ class TagViewSet(viewsets.ModelViewSet):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    """ Вывод работы с рецептами """
+    """
+    Отображение работы с рецептами.
+    """
     queryset = Recipe.objects.all()
     serializer_class = CreateRecipeSerializer
-    permission_classes = (AuthorPermission, )
+    permission_classes = (AuthorPermission,)
     pagination_class = CustomPagination
-    filter_backends = (DjangoFilterBackend, )
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
 
     def get_serializer_class(self):
