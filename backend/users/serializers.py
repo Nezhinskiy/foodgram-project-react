@@ -45,9 +45,13 @@ class FollowListSerializer(CustomUserSerializer):
     """
     Сериализатор для получения подписок.
     """
+    recipes_count = SerializerMethodField()
+    recipes = SerializerMethodField()
+
     class Meta(CustomUserSerializer.Meta):
-        fields = CustomUserSerializer.Meta.fields + (
-            'recipes_count', 'recipes'
+        fields = (
+            'email', 'id', 'username', 'first_name', 'last_name',
+            'is_subscribed', 'recipes_count', 'recipes'
         )
         read_only_fields = ('email', 'username', 'first_name', 'last_name')
 
@@ -68,3 +72,17 @@ class FollowListSerializer(CustomUserSerializer):
                 code=status.HTTP_400_BAD_REQUEST,
             )
         return data
+
+    def get_recipes_count(self, obj):
+        return obj.recipes.count()
+
+    def get_recipes(self, obj):
+        from recipes.serializers import FavoriteRecipesSerializer
+        request = self.context.get('request')
+        limit = request.GET.get('recipes_limit')
+        recipes = obj.recipes.all()
+        if limit:
+            recipes = recipes[: int(limit)]
+        serializer = FavoriteRecipesSerializer(recipes, many=True,
+                                               read_only=True)
+        return serializer.data

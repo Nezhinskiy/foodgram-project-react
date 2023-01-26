@@ -43,9 +43,7 @@ class Tag(models.Model):
         'Название тега', unique=True, max_length=LENGTH_OF_FIELDS_RECIPES
     )
     color = models.CharField(
-        'Цвет в HEX-кодировке',
-        unique=True,
-        max_length=7,
+        'Цвет в HEX-кодировке', unique=True, max_length=7,
         validators=[
             RegexValidator(
                 regex='^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
