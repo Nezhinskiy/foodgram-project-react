@@ -29,8 +29,8 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'slug')
 
 
-@admin.register(models.Favourite)
-class FavouriteAdmin(admin.ModelAdmin):
+@admin.register(models.Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
     """
     Администрирование добавления рецептов в избранное.
     """
