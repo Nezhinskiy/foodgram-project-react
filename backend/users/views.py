@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from core.pagination import CustomPagination
+from foodgram.pagination import CustomPagination
 from users.models import Follow, User
 from users.serializers import FollowListSerializer, UserSerializer
 
@@ -16,8 +16,7 @@ class CustomUserViewSet(UserViewSet):
     pagination_class = CustomPagination
 
     @action(
-        detail=True,
-        methods=['post', 'delete'],
+        detail=True, methods=['post', 'delete'],
         permission_classes=[IsAuthenticated],
     )
     def subscribe(self, request, id):

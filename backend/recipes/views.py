@@ -6,24 +6,20 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import (IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly,
-                                        SAFE_METHODS)
+from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
-
-from core.pagination import CustomPagination
-from recipes.filters import IngredientFilter, RecipeFilter
-from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
-                            Tag)
-from recipes.permissions import AuthorPermission
-from recipes.serializers import (CreateRecipeSerializer, FavoriteSerializer,
-                                 IngredientSerializer, RecipeReadSerializer,
-                                 TagSerializer)
-
-from recipes.models import ShoppingList
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
-from recipes.serializers import FavoriteRecipesSerializer
+from foodgram.pagination import CustomPagination
+from recipes.filters import IngredientFilter, RecipeFilter
+from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
+                            ShoppingList, Tag)
+from recipes.permissions import AuthorPermission
+from recipes.serializers import (CreateRecipeSerializer,
+                                 FavoriteRecipesSerializer, FavoriteSerializer,
+                                 IngredientSerializer, RecipeReadSerializer,
+                                 TagSerializer)
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
@@ -110,34 +106,27 @@ class RecipeViewSet(viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    @action(
-        detail=False, permission_classes=[IsAuthenticated]
-    )
+    @action(detail=False, permission_classes=[IsAuthenticated])
     def download_shopping_cart(self, request):
         user = request.user
         if not user.shopping_cart.exists():
             return Response(status=HTTP_400_BAD_REQUEST)
-
         ingredients = IngredientInRecipe.objects.filter(
             recipe__shopping_cart__user=user
         ).values(
             'ingredient__name',
             'ingredient__measurement_unit'
         ).annotate(amount=Sum('amount'))
-
         today = datetime.today()
         shopping_list = (
             f'Список покупок пользователя: {user}\n'
             f'Дата: {today:%Y-%m-%d}\n'
         )
         shopping_list += '\n'.join([
-            f'- {ingredient["ingredient__name"]} '
-            f'- {ingredient["amount"]} '
+            f'- {ingredient["ingredient__name"]} - {ingredient["amount"]} '
             f'{ingredient["ingredient__measurement_unit"]}'
             for ingredient in ingredients
         ])
-        shopping_list += f'\n\nFoodgram ({today:%Y})'
-
         filename = f'{user}_shopping_list.txt'
         response = HttpResponse(shopping_list, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename={filename}'
