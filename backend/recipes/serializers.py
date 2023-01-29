@@ -2,7 +2,7 @@ from djoser.serializers import UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
-from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
+from recipes.models import (Ingredient, IngredientInRecipe, Recipe,
                             ShoppingList, Tag)
 from users.serializers import CustomUserSerializer
 
@@ -173,15 +173,6 @@ class FavoriteRecipesSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time')
 
-
-class FavoriteSerializer(serializers.ModelSerializer):
-    """
-    Сериализатор избранных рецептов.
-    """
-    class Meta:
-        model = Favorite
-        fields = ('user', 'recipe')
-
     def validate(self, data):
         user = data['user']
         if user.favorites.filter(recipe=data['recipe']).exists():
@@ -189,11 +180,6 @@ class FavoriteSerializer(serializers.ModelSerializer):
                 'Рецепт уже был добавлен в избранное.'
             )
         return data
-
-    def to_representation(self, instance):
-        return FavoriteRecipesSerializer(
-            instance.recipe, context={'request': self.context.get('request')}
-        ).data
 
 
 class ShoppingCartSerializer(serializers.ModelSerializer):

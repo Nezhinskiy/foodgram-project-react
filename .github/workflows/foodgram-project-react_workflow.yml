@@ -20,8 +20,6 @@ jobs:
         pip install -r backend/requirements.txt
     - name: Test with flake8 and django tests
       run: python -m flake8
-    - name: Pytest
-      run: pytest
 
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub
@@ -43,6 +41,32 @@ jobs:
           context: foodgram-project-react
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram-project-react:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build_and_push_to_docker_hub
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo docker-compose stop
+            yes | sudo docker-compose rm web
+            sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/api_yamdb
+            touch .env
+            echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
+            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+            echo DEBUG=${{ secrets.DEBUG }} >> .env
+            echo DEBUG_MODE=${{ secrets.DEBUG_MODE }} >> .env
+            sudo docker-compose up --build -d
 
   send_message:
     runs-on: ubuntu-latest

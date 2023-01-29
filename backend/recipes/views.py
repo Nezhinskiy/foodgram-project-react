@@ -17,7 +17,7 @@ from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
                             ShoppingList, Tag)
 from recipes.permissions import AuthorPermission
 from recipes.serializers import (CreateRecipeSerializer,
-                                 FavoriteRecipesSerializer, FavoriteSerializer,
+                                 FavoriteRecipesSerializer,
                                  IngredientSerializer, RecipeReadSerializer,
                                  TagSerializer)
 
@@ -69,9 +69,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def shopping_cart(self, request, pk):
         user = request.user
+
         if request.method == 'POST':
             return self.add_to(ShoppingList, user, pk)
-        else:
+
+        if request.method == 'DELETE':
             return self.delete_from(ShoppingList, user, pk)
 
     @action(
@@ -80,9 +82,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def favorite(self, request, pk):
         user = request.user
+
         if request.method == 'POST':
             return self.add_to(Favorite, user, pk)
-        else:
+
+        if request.method == 'DELETE':
             return self.delete_from(Favorite, user, pk)
 
     def add_to(self, model, user, pk):
