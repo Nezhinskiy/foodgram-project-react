@@ -35,10 +35,16 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Push to Docker Hub
+      - name: Push backend to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          context: foodgram-project-react
+          context: backend
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram-project-backend:latest
+      - name: Push frontend to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: frontend
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram-project-react:latest
 
@@ -55,8 +61,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             sudo docker-compose stop
-            yes | sudo docker-compose rm web
-            sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/api_yamdb
+            yes | sudo docker-compose rm backend
+            sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/foodgram-project-backend
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
@@ -66,7 +72,7 @@ jobs:
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             echo DEBUG=${{ secrets.DEBUG }} >> .env
             echo DEBUG_MODE=${{ secrets.DEBUG_MODE }} >> .env
-            sudo docker-compose up --build -d
+            sudo docker-compose up -d
 
   send_message:
     runs-on: ubuntu-latest

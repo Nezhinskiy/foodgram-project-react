@@ -9,9 +9,7 @@ services:
       - .env
 
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    image: nezhinsky/foodgram-project-backend:latest
     restart: always
     volumes:
       - data_value:/app/data/
@@ -23,9 +21,7 @@ services:
       - .env
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: nezhinsky/foodgram-project-react:latest
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
@@ -37,7 +33,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
       - static_value:/var/html/static/
