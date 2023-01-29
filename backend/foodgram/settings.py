@@ -34,8 +34,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'django_filters',
-    'users.apps.UsersConfig',
-    'recipes.apps.RecipesConfig',
+    'users',
+    'recipes',
 ]
 
 MIDDLEWARE = [
@@ -69,7 +69,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 
-DEBUG_MODE = os.getenv("DEBUG_MODE", "False") == "True"
+DEBUG_MODE = os.getenv("DEBUG_MODE", "True") == "True"
 
 # Database
 if DEBUG_MODE:
