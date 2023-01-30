@@ -10,12 +10,12 @@ services:
       - .env
 
   backend:
-#    image: nezhinsky/foodgram-project-backend:latest
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
-#    command: >
-#      bash -c "gunicorn --bind 0:8000 foodgram.wsgi"
+    image: nezhinsky/foodgram-project-backend:latest
+#    build:
+#      context: ../backend
+#      dockerfile: Dockerfile
+    command: >
+      bash -c "gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000"
     restart: always
     volumes:
       - data_value:/app/data/
@@ -28,10 +28,10 @@ services:
       - .env
 
   frontend:
-#    image: nezhinsky/foodgram-project-react:latest
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: nezhinsky/foodgram-project-react:latest
+#    build:
+#      context: ../frontend
+#      dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
