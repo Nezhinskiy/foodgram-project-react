@@ -13,3 +13,7 @@ foodgram-project-react - 17ый спринт
 ### [Админка](http://footgram.ru:82/admin)
 логин: q
 пароль: q
+
+### Технологии:
+
+Python, Django, Django Rest Framework, Docker, Gunicorn, NGINX, PostgreSQL, Digital Ocean, Continuous Integration, Continuous Deployment

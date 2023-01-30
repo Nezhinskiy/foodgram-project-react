@@ -73,7 +73,7 @@ jobs:
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             echo DEBUG=${{ secrets.DEBUG }} >> .env
             echo DEBUG_MODE=${{ secrets.DEBUG_MODE }} >> .env
-            echo ${{ secrets.PASSWORD }} | sudo -S docker-compose up -d --build
+            echo ${{ secrets.PASSWORD }} | sudo -S COMPOSE_HTTP_TIMEOUT=200 docker-compose --verbose up -d --build
 
   send_message:
     runs-on: ubuntu-latest
