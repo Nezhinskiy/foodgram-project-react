@@ -3,13 +3,19 @@ services:
 
   db:
     image: postgres:13.9-alpine
+    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - .env
 
   backend:
-    image: nezhinsky/foodgram-project-backend:latest
+#    image: nezhinsky/foodgram-project-backend:latest
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+#    command: >
+#      bash -c "gunicorn --bind 0:8000 foodgram.wsgi"
     restart: always
     volumes:
       - data_value:/app/data/
@@ -22,17 +28,21 @@ services:
       - .env
 
   frontend:
-    image: nezhinsky/foodgram-project-react:latest
+#    image: nezhinsky/foodgram-project-react:latest
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
       - db
 
   nginx:
-    image: nginx:1.19.3
+    image: nginx:1.23.3-alpine
     restart: always
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
@@ -41,6 +51,7 @@ services:
       - media_value:/var/html/media/
     depends_on:
       - backend
+      - frontend
 
 volumes:
   postgres_data:

@@ -1,6 +1,7 @@
 import Header from './header'
 import Footer from './footer'
 import LinkComponent from './link'
+import LinkRedirectComponent from './external-links'
 import Container from './container'
 import Main from './main'
 import Card from './card'
@@ -30,6 +31,7 @@ export {
   Header,
   Footer,
   LinkComponent,
+  LinkRedirectComponent,
   Container,
   Main,
   Card,
