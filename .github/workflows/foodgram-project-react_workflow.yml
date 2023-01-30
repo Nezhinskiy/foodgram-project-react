@@ -60,7 +60,8 @@ jobs:
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            echo ${{ secrets.PASSWORD }} | sudo -S docker-compose down
+            echo ${{ secrets.PASSWORD }} | sudo -S docker-compose stop
+            echo ${{ secrets.PASSWORD }} | yes | sudo -S docker-compose rm backend
             echo ${{ secrets.PASSWORD }} | sudo -S docker image rm ${{ secrets.DOCKER_USERNAME }}/foodgram-project-backend
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
