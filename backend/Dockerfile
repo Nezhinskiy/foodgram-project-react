@@ -12,5 +12,4 @@ RUN apt-get update -y && apt-get upgrade -y && \
 
 COPY . .
 
-CMD python manage.py migrate && python manage.py load_data && python manage.py collectstatic --noinput
-
+CMD gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000

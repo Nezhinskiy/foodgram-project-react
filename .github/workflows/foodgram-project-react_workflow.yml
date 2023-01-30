@@ -58,12 +58,11 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
           script: |
-            cd foodgram-project-react/
-            echo ${{ secrets.PASSWORD }} | sudo -S docker-compose stop
-            echo ${{ secrets.PASSWORD }} | yes | sudo -S docker-compose rm backend
-            echo ${{ secrets.PASSWORD }} | sudo -S docker image rm ${{ secrets.DOCKER_USERNAME }}/foodgram-project-backend
+            sudo docker-compose stop
+            yes | sudo docker-compose rm backend
+            sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/foodgram-project-backend
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
@@ -73,7 +72,7 @@ jobs:
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             echo DEBUG=${{ secrets.DEBUG }} >> .env
             echo DEBUG_MODE=${{ secrets.DEBUG_MODE }} >> .env
-            echo ${{ secrets.PASSWORD }} | sudo -S COMPOSE_HTTP_TIMEOUT=200 docker-compose --verbose up -d --build
+            sudo COMPOSE_HTTP_TIMEOUT=200 docker-compose --verbose up -d --build
 
   send_message:
     runs-on: ubuntu-latest
