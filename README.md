@@ -4,8 +4,12 @@ foodgram-project-react - 17ый спринт
 
 ![example workflow](https://github.com/Nezhinskiy/foodgram-project-react/actions/workflows/foodgram-project-react_workflow.yml/badge.svg)
 
-Ссылка на сайт http://footgram.ru/recipes
+[Перейти на сайт](http://footgram.ru:82/recipes)
 
-Документация к API - http://footgram.ru/docs/redoc.html
+[Документация к API](http://footgram.ru:82/docs/redoc.html)
 
-Ссылка на API - http://footgram.ru/api
+[Перейти к API](http://footgram.ru:82/api)
+
+### [Админка](http://footgram.ru:82/admin)
+логин: q
+пароль: q
