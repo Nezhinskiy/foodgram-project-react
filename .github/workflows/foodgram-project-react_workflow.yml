@@ -60,6 +60,7 @@ jobs:
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
           script: |
+            cd foodgram-project-react/
             echo ${{ secrets.PASSWORD }} | sudo -S docker-compose stop
             echo ${{ secrets.PASSWORD }} | yes | sudo -S docker-compose rm backend
             echo ${{ secrets.PASSWORD }} | sudo -S docker image rm ${{ secrets.DOCKER_USERNAME }}/foodgram-project-backend
@@ -72,7 +73,7 @@ jobs:
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             echo DEBUG=${{ secrets.DEBUG }} >> .env
             echo DEBUG_MODE=${{ secrets.DEBUG_MODE }} >> .env
-            echo ${{ secrets.PASSWORD }} | sudo -S docker-compose up -d
+            echo ${{ secrets.PASSWORD }} | sudo -S docker-compose up -d --build
 
   send_message:
     runs-on: ubuntu-latest
