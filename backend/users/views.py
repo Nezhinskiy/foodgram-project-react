@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from foodgram.pagination import CustomPagination
 from users.models import Follow, User
-from users.serializers import FollowListSerializer, CustomUserSerializer
+from users.serializers import CustomUserSerializer, FollowListSerializer
 
 
 class CustomUserViewSet(UserViewSet):
